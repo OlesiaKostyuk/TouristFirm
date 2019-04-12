@@ -158,6 +158,43 @@ Booking Service::createBookingFromString(char* bookingString) {
 	return booking;
 }
 
+Review Service::createReviewFromString(char* reviewString) {
+	Review rev;
+	char buffer[500];
+	strstream stream;
+	strcat(reviewString, "\n");
+	stream << reviewString;
+	if (stream.good()) {
+		stream >> buffer;
+		int id = atoi(buffer);
+		rev.setId(id);
+	}
+	if (stream.good()) {
+		stream >> buffer;
+		int id = atoi(buffer);
+		rev.setHotelId(id);
+	}
+	if (stream.good()) {
+		stream >> buffer;
+		int id = atoi(buffer);
+		rev.setUserlId(id);
+	}
+	if (stream.good()) {
+		stream >> buffer;
+		int id = atoi(buffer);
+		rev.setRate(id);
+	}
+	if (stream.good()) {
+		stream >> buffer;
+		string buff = convert(buffer);
+		for (int i = 0; i < buff.length(); i++) {
+			if (buff[i] == '_') buff[i] = ' ';
+		}
+		rev.setText(buff);
+	}
+	return rev;
+}
+
 string Service::convert(char* mas) {
 	strstream wordStream;
 	wordStream << mas << ends;
@@ -237,6 +274,30 @@ void Service::deleteStringFromFile(int stringNumber, string fileName) {
 	fileOut.write(line_file_text.c_str(), line_file_text.size());
 	fileOut.clear();
 	fileOut.close();
+}
+
+void Service::sortHotelsVectorByName(Vector<Hotel> &hotel) {
+	for (int i = 0; i < hotel.getSize() - 1; i++) {
+		for (int j = i + 1; j < hotel.getSize(); j++) {
+			if (hotel.getArray()[i].getHotelName() > hotel.getArray()[j].getHotelName()) {
+				Hotel temp = hotel.getArray()[i];
+				hotel.getArray()[i] = hotel.getArray()[j];
+				hotel.getArray()[j] = temp;
+			}
+		}
+	}
+}
+
+void Service::sortHotelsVectorByRate(Vector<Hotel> &hotel) {
+	for (int i = 0; i < hotel.getSize() - 1; i++) {
+		for (int j = i + 1; j < hotel.getSize(); j++) {
+			if (hotel.getArray()[i].getStars() > hotel.getArray()[j].getStars()) {
+				Hotel temp = hotel.getArray()[i];
+				hotel.getArray()[i] = hotel.getArray()[j];
+				hotel.getArray()[j] = temp;
+			}
+		}
+	}
 }
 
 void Service::sortTourVectorByCost(Vector<Tour> &tour) {
@@ -367,6 +428,34 @@ void Service::createBookingVector(Vector<Booking> &books, int id = 0) {
 	bookFile.close();
 }
 
+void Service::createReviewVector(Vector<Review> &reviews, int id = 0) {
+	ifstream reviewFile("e://ЛАБЫ/Олесе/review.txt");
+	if (!reviewFile.is_open()) {
+		cout << "Базы данных не существует!" << endl;
+		system("pause");
+		exit(0);
+	}
+	char revBuffer[300];
+	while (!reviewFile.eof()) {
+		reviewFile.getline(revBuffer, 200);
+		if (strcmp(revBuffer, "") == 0) break;
+		Review review = createReviewFromString(revBuffer);
+		if (id == 0) reviews.add(review);
+		else if (review.getHotelId() == id) reviews.add(review);
+	}
+	for (int i = 0; i < reviews.getSize() - 1; i++) {
+		for (int j = i + 1; j < reviews.getSize(); j++) {
+			if (reviews.getArray()[i].getId() > reviews.getArray()[j].getId()) {
+				Review temp = reviews.getArray()[i];
+				reviews.getArray()[i] = reviews.getArray()[j];
+				reviews.getArray()[j] = temp;
+			}
+		}
+	}
+	reviewFile.close();
+}
+
+
 void Service::removeUserBooking(int bookId, int userId) {
 	int counter = 0;
 	Vector<Booking> book;
@@ -396,6 +485,18 @@ int Service::getLastBookingId() {
 	for (int i = 0; i < book.getSize(); i++)
 	{
 		if (book.getArray()[i].getBookId() > maxId) maxId = book.getArray()[i].getBookId();
+	}
+	return maxId;
+}
+
+int Service::getLastReviewId() {
+	Vector<Review> rev;
+	createReviewVector(rev);
+	int maxId = -1;
+
+	for (int i = 0; i < rev.getSize(); i++)
+	{
+		if (rev.getArray()[i].getId() > maxId) maxId = rev.getArray()[i].getId();
 	}
 	return maxId;
 }

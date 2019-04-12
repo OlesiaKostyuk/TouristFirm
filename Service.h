@@ -4,6 +4,7 @@
 #include "Booking.h"
 #include "Hotel.h"
 #include "Vector.h"
+#include "Review.h"
 #include <iostream>
 #include <string>
 #include <strstream>
@@ -16,6 +17,7 @@ public:
 	Tour createTourFromString(char* tourString);
 	Hotel createHotelFromString(char* hotelString);
 	Booking createBookingFromString(char* bookingString);
+	Review createReviewFromString(char* reviewString);
 	void printTourTableString();
 	void printHotelTableString();
 	void printBookingTableString();
@@ -29,6 +31,7 @@ public:
 	void createTourVector(Vector<Tour> &tours);
 	void createUserVector(Vector<User> &users);
 	void createBookingVector(Vector<Booking> &books, int id);
+	void createReviewVector(Vector<Review> &review, int id);
 
 	string convert(char* mas);
 	void deleteStringFromFile(int number, string fileName);
@@ -37,6 +40,10 @@ public:
 		cin.get();
 		cin.get();
 	}
+
+	void sortHotelsVectorByRate(Vector<Hotel> &vector);
+	void sortHotelsVectorByName(Vector<Hotel> &vector);
+
 	void sortTourVectorByCost(Vector<Tour> &vector);
 	void sortTourVectorByBeginDate(Vector<Tour> &vector);
 	void sortTourVectorByEndDate(Vector<Tour> &vector);
@@ -45,6 +52,7 @@ public:
 
 	void removeUserBooking(int bookId, int userId);
 	int getLastBookingId();
+	int getLastReviewId();
 
 	User getUserById(int id);
 	string encodePassword(string str) {

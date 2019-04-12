@@ -41,12 +41,75 @@ void UserMenu::menu() {
 }
 
 void UserMenu::showAllHotels() {
-	system("cls");
-	cout << "Все отели:" << endl;
-	Vector<Hotel> hotels;
-	this->service.createHotelVector(hotels);
-	this->service.printHotelVector(hotels);
-	this->service.printEnterMessage();
+	int sort = 0;
+	while (true) {
+		system("cls");
+		cout << "Все отели:" << endl;
+		Vector<Hotel> hotels;
+		this->service.createHotelVector(hotels);
+		this->sortHotels(sort, hotels);
+		this->service.printHotelVector(hotels);
+		switch (hotelsMenu())
+		{
+		case 1: {
+			int id;
+			cout << "Введите id отеля: ";
+			cin >> id;
+			this->addReview(id);
+			this->service.printEnterMessage();
+			break;
+		}
+		case 2: {
+			Vector<Review> reviews;
+			int id;
+			cout << "Введите id отеля: ";
+			cin >> id;
+			this->service.createReviewVector(reviews, id);
+			if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
+			else {
+				for (int i = 0; i < reviews.getSize(); i++) {
+					cout << reviews.getArray()[i] << endl;
+				}
+			}
+			this->service.printEnterMessage();
+			break;
+		}
+		case 3: {
+			cout << "1) Сортировать отели по названию" << endl;
+			cout << "2) Сортировать отели по звездам" << endl;
+			cout << "3) Не сортировать" << endl;
+			cin >> sort; break;
+		}
+		case 4:
+			int id;
+			cout << "Введите id отеля: ";
+			cin >> id;
+			showTourListByHotel(id);
+			break;
+
+		default:
+			return;
+		}
+	}
+}
+
+void UserMenu::sortHotels(int i, Vector<Hotel> &hotel) {
+	switch (i)
+	{
+	case 1: this->service.sortHotelsVectorByName(hotel); break;
+	case 2: this->service.sortHotelsVectorByRate(hotel); break;
+	}
+}
+
+int UserMenu::hotelsMenu() {
+	int i;
+	cout << "1) Оставить отзыв на отель" << endl;
+	cout << "2) Показать отзывы на отель" << endl;
+	cout << "3) Сортировать отели" << endl;
+	cout << "4) Показать туры по отелю" << endl;
+	cout << "5) Назад" << endl;
+	cin >> i;
+	return i;
 }
 
 void UserMenu::showAllTours() {
@@ -209,7 +272,67 @@ void UserMenu::bookTour(int tourId) {
 
 }
 
-void UserMenu::showMyProfile() {
-	User user = this->service.getUserById(this->userId);
+void UserMenu::addReview(int hotelId) {
+	Vector<Review> reviews;
+	this->service.createReviewVector(reviews, 0);
+	bool exist = false;
+	for (int i = 0; i < reviews.getSize(); i++)
+	{
+		if (reviews.getArray()[i].getId() == hotelId) {
+			exist = true;
+			break;
+		}
+	}
+	int id = this->service.getLastReviewId() + 1;
+	if (exist) {
+		char text[500];
+		cout << "Введите текст отзыва: " << endl;
+		cin.get();
+		cin.getline(text, 500, '\n');
+		ofstream file("e://ЛАБЫ/Олесе/review.txt", ios::app);
+		int rate = 0;
+		cout << "Введите оценку отелю от 1 до 5 (другие значения принимаются как 2) ";
+		cin >> rate;
+		rate = rate < 5 && rate > 0 ? rate : 2;
+		if (!file.is_open()) {
+			cout << "Ошибка открытия файла!" << endl;
+			return;
+		}
+		else {
+			for (int i = 0; i < strlen(text); i++) {
+				if (text[i] == ' ') text[i] = '_';
+			}
+			file << "\n" << id << " " << hotelId << " " << this->userId << " " << rate << " " << text;
+			cout << "Отзыв добавлен" << endl;
+		}
+		file.close();
+	}
+	else {
+		cout << "id не найден" << endl;
+		this->service.printEnterMessage();
+	}
+}
 
+void UserMenu::showMyProfile() {
+	system("cls");
+	User user = this->service.getUserById(this->userId);
+	cout << "+-----+---------------+---------------+---------------+---------------+----------------------+" << endl;
+	cout << user;
+	cout << "+-----+---------------+---------------+---------------+---------------+----------------------+" << endl;
+	this->service.printEnterMessage();
+}
+
+void UserMenu::showTourListByHotel(int id) {
+	Vector<Tour> tours;
+	this->service.createTourVector(tours);
+	this->service.printTourTableString();
+	this->service.printTourTableTitle();
+	for (int i = 0; i < tours.getSize(); i++) {
+		if (tours.getArray()[i].getHotelId() == id) {
+			this->service.printTourTableString();
+			cout << tours.getArray()[i];			
+		}
+	}
+	this->service.printTourTableString();
+	this->service.printEnterMessage();
 }

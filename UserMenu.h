@@ -10,6 +10,7 @@ public:
 	int showMenu();
 
 	int toursMenu();
+	int hotelsMenu();
 	int getHotelIdByTourId(int id);
 
 	void showHotelById(int id);
@@ -21,7 +22,12 @@ public:
 	void showUserBookings();
 	void showMyProfile();
 
+	void showTourListByHotel(int id);
+
+	void addReview(int hotelId);
+
 	void sortTours(int i, Vector<Tour> &tours);
+	void sortHotels(int i, Vector<Hotel> &tours);
 	UserMenu(int id) { this->userId = id; };
 	~UserMenu() {};
 };

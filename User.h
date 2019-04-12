@@ -53,7 +53,7 @@ public:
 		cout << "|" << setw(15) << user.surname;
 		cout << "|" << setw(15) << user.lastname;
 		cout << "|" << setw(15) << user.phone;
-		cout << "|" << setw(15) << user.email << "|" << endl;
+		cout << "|" << setw(22) << user.email << "|" << endl;
 		return os;
 	}
 

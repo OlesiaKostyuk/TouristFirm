@@ -156,6 +156,7 @@
     <ClInclude Include="Booking.h" />
     <ClInclude Include="Hotel.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Review.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Tour.h" />
     <ClInclude Include="User.h" />
