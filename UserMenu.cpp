@@ -67,9 +67,13 @@ void UserMenu::showAllHotels() {
 			this->service.createReviewVector(reviews, id);
 			if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
 			else {
+				this->service.printReviewString();
+				this->service.printReviewTitle();
 				for (int i = 0; i < reviews.getSize(); i++) {
-					cout << reviews.getArray()[i] << endl;
+					this->service.printReviewString();
+					cout << reviews.getArray()[i];
 				}
+				this->service.printReviewString();
 			}
 			this->service.printEnterMessage();
 			break;
@@ -174,9 +178,22 @@ void UserMenu::showHotelById(int id) {
 			if (hotels.getArray()[i].getId() == id) {
 				this->service.printHotelTableString();
 				cout << hotels.getArray()[i];
+				this->service.printHotelTableString();
+				cout << endl << "Отзывы: "<<endl;
+				Vector<Review> reviews;
+				this->service.createReviewVector(reviews, id);
+				if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
+				else {
+					this->service.printReviewString();
+					this->service.printReviewTitle();
+					for (int i = 0; i < reviews.getSize(); i++) {
+						this->service.printReviewString();
+						cout << reviews.getArray()[i];
+					}
+					this->service.printReviewString();
+				}
 			}
 		}
-		this->service.printHotelTableString();
 	}
 	this->service.printEnterMessage();
 }
@@ -316,9 +333,11 @@ void UserMenu::addReview(int hotelId) {
 void UserMenu::showMyProfile() {
 	system("cls");
 	User user = this->service.getUserById(this->userId);
-	cout << "+-----+---------------+---------------+---------------+---------------+----------------------+" << endl;
+	this->service.printUserString();
+	this->service.printUserTitle();
+	this->service.printUserString();
 	cout << user;
-	cout << "+-----+---------------+---------------+---------------+---------------+----------------------+" << endl;
+	this->service.printUserString();
 	this->service.printEnterMessage();
 }
 

@@ -24,10 +24,10 @@ public:
 	void setText(string text) { this->text = text; }
 
 	friend ostream& operator<<(ostream &os, const Review &review) {
-		cout << "id:                   " << review.id << endl;
-		cout << "authorId:             " << review.userId << endl;
-		cout << "text:                 " << review.text << endl;
-		cout << "rate:                 " << review.rate << endl;
+		cout << "|" << setw(5) << review.id;
+		cout << "|" << setw(8) << review.userId;
+		cout << "|" << setw(5) << review.rate;
+		cout << "|" << setw(5) << review.text << endl;
 		return os;
 	}
 

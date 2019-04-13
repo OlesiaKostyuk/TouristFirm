@@ -187,10 +187,7 @@ Review Service::createReviewFromString(char* reviewString) {
 	if (stream.good()) {
 		stream >> buffer;
 		string buff = convert(buffer);
-		for (int i = 0; i < buff.length(); i++) {
-			if (buff[i] == '_') buff[i] = ' ';
-		}
-		rev.setText(buff);
+		rev.setText(this->replace(buff, '_', ' '));
 	}
 	return rev;
 }
@@ -455,7 +452,6 @@ void Service::createReviewVector(Vector<Review> &reviews, int id = 0) {
 	reviewFile.close();
 }
 
-
 void Service::removeUserBooking(int bookId, int userId) {
 	int counter = 0;
 	Vector<Booking> book;
@@ -497,6 +493,18 @@ int Service::getLastReviewId() {
 	for (int i = 0; i < rev.getSize(); i++)
 	{
 		if (rev.getArray()[i].getId() > maxId) maxId = rev.getArray()[i].getId();
+	}
+	return maxId;
+}
+
+int Service::getLastTourId() {
+	Vector<Tour> tour;
+	createTourVector(tour);
+	int maxId = -1;
+
+	for (int i = 0; i < tour.getSize(); i++)
+	{
+		if (tour.getArray()[i].getId() > maxId) maxId = tour.getArray()[i].getId();
 	}
 	return maxId;
 }

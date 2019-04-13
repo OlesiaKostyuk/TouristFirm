@@ -12,7 +12,7 @@ using namespace std;
 class Service
 {
 public:
-	
+
 	User createUserFromString(char* userString);
 	Tour createTourFromString(char* tourString);
 	Hotel createHotelFromString(char* hotelString);
@@ -53,6 +53,7 @@ public:
 	void removeUserBooking(int bookId, int userId);
 	int getLastBookingId();
 	int getLastReviewId();
+	int getLastTourId();
 
 	User getUserById(int id);
 	string encodePassword(string str) {
@@ -66,11 +67,50 @@ public:
 		}
 		for (int i = 0; i < str.length(); i++) {
 			str[i] = str[i] ^ diff % 16;
-		}		
+		}
 		return str + salt;
+	}
+
+	void printReviewString() {
+		cout << "+-----+--------+-----+----------------------------------------------------------------------------------------" << endl;
+	}
+
+	void printReviewTitle() {
+		cout << "|" << setw(5) << "id";
+		cout << "|" << setw(8) << "userId";
+		cout << "|" << setw(5) << "rate";
+		cout << "|" << setw(5) << "text" << endl;
+	}
+
+	void printUserString() {
+		cout << "+-----+---------------+---------------+---------------+---------------+----------------------+" << endl;
+	}
+
+	void printUserTitle() {
+		cout << "|" << setw(5) << "id";
+		cout << "|" << setw(15) << "Name";
+		cout << "|" << setw(15) << "Surname";
+		cout << "|" << setw(15) << "Last name";
+		cout << "|" << setw(15) << "Phone";
+		cout << "|" << setw(22) << "Email" << "|" << endl;
+	}
+
+	string replace(string str, char old, char newChar) {
+		for (int i = 0; i < str.length(); i++) {
+			if (str[i] == old) str[i] == newChar;
+		}
+		return str;
+	}
+
+	void replace(char str[], char old, char newChar) {
+		for (int i = 0; i < strlen(str); i++) {
+			if (str[i] == old) str[i] == newChar;
+		}
 	}
 
 	Service() {}
 	~Service() {}
 };
+
+
 
