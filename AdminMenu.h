@@ -18,6 +18,9 @@ public:
 	void addTour();
 	void deleteTour();
 
+	void addHotel();
+	void deleteHotel();
+
 	AdminMenu() {};
 	~AdminMenu() {};
 };

@@ -179,7 +179,7 @@ void UserMenu::showHotelById(int id) {
 				this->service.printHotelTableString();
 				cout << hotels.getArray()[i];
 				this->service.printHotelTableString();
-				cout << endl << "Отзывы: "<<endl;
+				cout << endl << "Отзывы: " << endl;
 				Vector<Review> reviews;
 				this->service.createReviewVector(reviews, id);
 				if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
@@ -223,27 +223,37 @@ void UserMenu::showUserBookings() {
 		cout << "Мои брони:" << endl;
 		Vector<Booking> books;
 		this->service.createBookingVector(books, this->userId);
-		this->service.printBookingTableString();
-		this->service.printBookingTableTitle();
-		for (int i = 0; i < books.getSize(); i++) {
+		this->service.sortBookingVectorById(books);
+		if (books.getSize() != 0) {
 			this->service.printBookingTableString();
-			cout << books.getArray()[i];
-		}
-		this->service.printBookingTableString();
-		cout << "1) Удалить бронь" << endl;
-		cout << "2) Назад" << endl;
-		int i;
-		cin >> i;
-		if (i == 1) {
-			int id;
-			cout << "Введите id брони, которую хотите удалить" << endl;
-			cin >> id;
-			this->service.removeUserBooking(id, this->userId);
+			this->service.printBookingTableTitle();
+			for (int i = 0; i < books.getSize(); i++) {
+				this->service.printBookingTableString();
+				cout << books.getArray()[i];
+			}
+			this->service.printBookingTableString();
+
+			cout << "1) Удалить бронь" << endl;
+			cout << "2) Назад" << endl;
+			int i;
+			cin >> i;
+			if (i == 1) {
+				int id;
+				cout << "Введите id брони, которую хотите удалить" << endl;
+				cin >> id;
+				this->service.removeUserBooking(id, this->userId);
+				this->service.printEnterMessage();
+			}
+			else {
+				this->service.printEnterMessage();
+				return;
+			}
 		}
 		else {
+			cout << "У вас нет ни одной брони" << endl;
+			this->service.printEnterMessage();
 			return;
-		}
-		this->service.printEnterMessage();
+		}		
 	}
 }
 
@@ -349,7 +359,7 @@ void UserMenu::showTourListByHotel(int id) {
 	for (int i = 0; i < tours.getSize(); i++) {
 		if (tours.getArray()[i].getHotelId() == id) {
 			this->service.printTourTableString();
-			cout << tours.getArray()[i];			
+			cout << tours.getArray()[i];
 		}
 	}
 	this->service.printTourTableString();

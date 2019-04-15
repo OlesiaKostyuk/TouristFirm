@@ -54,6 +54,7 @@ public:
 	int getLastBookingId();
 	int getLastReviewId();
 	int getLastTourId();
+	int getLastHotelId();
 
 	User getUserById(int id);
 	string encodePassword(string str) {
@@ -97,14 +98,14 @@ public:
 
 	string replace(string str, char old, char newChar) {
 		for (int i = 0; i < str.length(); i++) {
-			if (str[i] == old) str[i] == newChar;
+			if (str[i] == old) str[i] = newChar;
 		}
 		return str;
 	}
 
 	void replace(char str[], char old, char newChar) {
 		for (int i = 0; i < strlen(str); i++) {
-			if (str[i] == old) str[i] == newChar;
+			if (str[i] == old) str[i] = newChar;
 		}
 	}
 

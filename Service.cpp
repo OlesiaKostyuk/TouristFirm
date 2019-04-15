@@ -121,7 +121,8 @@ Hotel Service::createHotelFromString(char* hotelString) {
 	}
 	if (stream.good()) {
 		stream >> buffer;
-		hotel.setDescription(convert(buffer));
+		string buff = convert(buffer);
+		hotel.setDescription(this->replace(buff, '_', ' '));
 	}
 	return hotel;
 }
@@ -200,29 +201,29 @@ string Service::convert(char* mas) {
 }
 
 void Service::printTourTableString() {
-	cout << "+-----+------------+------------+------------+------------+------------+------------+" << endl;
+	cout << "+-----+-------------------+------------+------------+------------+------------+-------------------+" << endl;
 }
 
 void Service::printTourTableTitle() {
 	cout << "|" << setw(5) << "id";
-	cout << "|" << setw(12) << "Страна";
+	cout << "|" << setw(19) << "Страна";
 	cout << "|" << setw(12) << "Начало";
 	cout << "|" << setw(12) << "Конец";
 	cout << "|" << setw(12) << "Стоимость";
 	cout << "|" << setw(12) << "id отеля";
-	cout << "|" << setw(12) << "Авиакомпания" << "|" << endl;
+	cout << "|" << setw(19) << "Авиакомпания" << "|" << endl;
 }
 
 void Service::printHotelTableString() {
-	cout << "+-----+---------------+----------+---------------+---------------+------------------------------+" << endl;
+	cout << "+-----+-------------------+----------+-------------------+-------------------+------------------------------+" << endl;
 }
 
 void Service::printHotelTableTitle() {
 	cout << "|" << setw(5) << "id";
-	cout << "|" << setw(15) << "Название";
+	cout << "|" << setw(19) << "Название";
 	cout << "|" << setw(10) << "Звезды";
-	cout << "|" << setw(15) << "Страна";
-	cout << "|" << setw(15) << "Город";
+	cout << "|" << setw(19) << "Страна";
+	cout << "|" << setw(19) << "Город";
 	cout << "|" << setw(30) << "Описание" << "|" << endl;
 }
 
@@ -365,7 +366,7 @@ void Service::createHotelVector(Vector<Hotel> &hotels) {
 	char hotelBuffer[300];
 	while (!hotelsFile.eof()) {
 		hotelsFile.getline(hotelBuffer, 200);
-		if (strcmp(hotelBuffer, "") == 0) break;
+		if (strcmp(hotelBuffer, "") == 0) continue;
 		Hotel hotel = createHotelFromString(hotelBuffer);
 		hotels.add(hotel);
 	}
@@ -382,7 +383,7 @@ void Service::createTourVector(Vector<Tour> &tours) {
 	char tourBuffer[300];
 	while (!toursFile.eof()) {
 		toursFile.getline(tourBuffer, 200);
-		if (strcmp(tourBuffer, "") == 0) break;
+		if (strcmp(tourBuffer, "") == 0) continue;
 		Tour tour = createTourFromString(tourBuffer);
 		tours.add(tour);
 	}
@@ -399,7 +400,7 @@ void Service::createUserVector(Vector<User> &users) {
 	char userBuffer[300];
 	while (!usersFile.eof()) {
 		usersFile.getline(userBuffer, 200);
-		if (strcmp(userBuffer, "") == 0) break;
+		if (strcmp(userBuffer, "") == 0) continue;
 		User user = createUserFromString(userBuffer);
 		users.add(user);
 	}
@@ -416,12 +417,12 @@ void Service::createBookingVector(Vector<Booking> &books, int id = 0) {
 	char bookBuffer[300];
 	while (!bookFile.eof()) {
 		bookFile.getline(bookBuffer, 200);
-		if (strcmp(bookBuffer, "") == 0) break;
+		if (strcmp(bookBuffer, "") == 0) continue;
 		Booking book = createBookingFromString(bookBuffer);
 		if (id == 0) books.add(book);
 		else if (book.getUserId() == id) books.add(book);
 	}
-	sortBookingVectorById(books);
+	//sortBookingVectorById(books);
 	bookFile.close();
 }
 
@@ -460,12 +461,17 @@ void Service::removeUserBooking(int bookId, int userId) {
 	{
 		counter++;
 		if (book.getArray()[i].getBookId() == bookId) {
-			if (book.getArray()[i].getUserId() == userId) {
-				deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/bookings.txt");
-				cout << "Бронь удалена" << endl;
+			if (book.getArray()[i].getPaymentStatus() == "unpaid") {
+				if (book.getArray()[i].getUserId() == userId) {
+					deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/bookings.txt");
+					cout << "Бронь удалена" << endl;
+				}
+				else {
+					cout << "Ошибка доступа" << endl;
+				}
 			}
 			else {
-				cout << "Ошибка доступа" << endl;
+				cout << "Вы не можете удалить оплаченную бронь" << endl;
 			}
 			return;
 		}
@@ -505,6 +511,17 @@ int Service::getLastTourId() {
 	for (int i = 0; i < tour.getSize(); i++)
 	{
 		if (tour.getArray()[i].getId() > maxId) maxId = tour.getArray()[i].getId();
+	}
+	return maxId;
+}
+
+int Service::getLastHotelId() {
+	Vector<Hotel> hotel;
+	createHotelVector(hotel);
+	int maxId = -1;
+	for (int i = 0; i < hotel.getSize(); i++)
+	{
+		if (hotel.getArray()[i].getId() > maxId) maxId = hotel.getArray()[i].getId();
 	}
 	return maxId;
 }

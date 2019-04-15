@@ -28,10 +28,10 @@ public:
 
 	friend ostream& operator<<(ostream &os, const Hotel &hotel) {
 		cout << "|" << setw(5) << hotel.id;
-		cout << "|" << setw(15) << hotel.hotelName;
+		cout << "|" << setw(19) << hotel.hotelName;
 		cout << "|" << setw(10) << hotel.stars;
-		cout << "|" << setw(15) << hotel.country;
-		cout << "|" << setw(15) << hotel.town;
+		cout << "|" << setw(19) << hotel.country;
+		cout << "|" << setw(19) << hotel.town;
 		cout << "|" << setw(30) << hotel.description << "|" << endl;
 		return os;
 	}

@@ -43,12 +43,12 @@ public:
 
 	friend ostream& operator<<(ostream &os, const Tour &tour) {
 		cout << "|" << setw(5) << tour.id;
-		cout << "|" << setw(12) << tour.country;
+		cout << "|" << setw(19) << tour.country;
 		cout << "|" << setw(12) << tour.beginDate;
 		cout << "|" << setw(12) << tour.endDate;
 		cout << "|" << setw(12) << tour.cost;
 		cout << "|" << setw(12) << tour.hotelId;
-		cout << "|" << setw(12) << tour.aviaCompanyName << "|" << endl;
+		cout << "|" << setw(19) << tour.aviaCompanyName << "|" << endl;
 		return os;
 	}
 };
