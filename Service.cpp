@@ -5,6 +5,8 @@
 
 using namespace std;
 
+Service* Service::service = 0;
+
 User Service::createUserFromString(char* userString) {
 	User user;
 	char buffer[50];
@@ -357,7 +359,7 @@ void Service::printTourVector(Vector<Tour> &tours) {
 }
 
 void Service::createHotelVector(Vector<Hotel> &hotels) {
-	ifstream hotelsFile("e://ЛАБЫ/Олесе/hotels.txt");
+	ifstream hotelsFile("e://ЛАБЫ/4 сем/hotels.txt");
 	if (!hotelsFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -374,7 +376,7 @@ void Service::createHotelVector(Vector<Hotel> &hotels) {
 }
 
 void Service::createTourVector(Vector<Tour> &tours) {
-	ifstream toursFile("e://ЛАБЫ/Олесе/tours.txt");
+	ifstream toursFile("e://ЛАБЫ/4 сем/tours.txt");
 	if (!toursFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -391,7 +393,7 @@ void Service::createTourVector(Vector<Tour> &tours) {
 }
 
 void Service::createUserVector(Vector<User> &users) {
-	ifstream usersFile("e://ЛАБЫ/Олесе/users.txt");
+	ifstream usersFile("e://ЛАБЫ/4 сем/users.txt");
 	if (!usersFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -408,7 +410,7 @@ void Service::createUserVector(Vector<User> &users) {
 }
 
 void Service::createBookingVector(Vector<Booking> &books, int id = 0) {
-	ifstream bookFile("e://ЛАБЫ/Олесе/bookings.txt");
+	ifstream bookFile("e://ЛАБЫ/4 сем/bookings.txt");
 	if (!bookFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -427,7 +429,7 @@ void Service::createBookingVector(Vector<Booking> &books, int id = 0) {
 }
 
 void Service::createReviewVector(Vector<Review> &reviews, int id = 0) {
-	ifstream reviewFile("e://ЛАБЫ/Олесе/review.txt");
+	ifstream reviewFile("e://ЛАБЫ/4 сем/review.txt");
 	if (!reviewFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -463,7 +465,7 @@ void Service::removeUserBooking(int bookId, int userId) {
 		if (book.getArray()[i].getBookId() == bookId) {
 			if (book.getArray()[i].getPaymentStatus() == "unpaid") {
 				if (book.getArray()[i].getUserId() == userId) {
-					deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/bookings.txt");
+					deleteStringFromFile(counter, "e://ЛАБЫ/4 сем/bookings.txt");
 					cout << "Бронь удалена" << endl;
 				}
 				else {

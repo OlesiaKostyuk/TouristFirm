@@ -18,7 +18,7 @@ int getLastId();
 void AccountService::authorization() {
 	system("cls");
 	cout << "Авторизация" << endl;
-	ifstream usersFile("e://ЛАБЫ/Олесе/users.txt");
+	ifstream usersFile("e://ЛАБЫ/4 сем/users.txt");
 	if (!usersFile.is_open()) {
 		cout << "Базы данных не существует!" << endl;
 		system("pause");
@@ -33,8 +33,8 @@ void AccountService::authorization() {
 	char userBuffer[300];
 	while (!usersFile.eof()) {
 		usersFile.getline(userBuffer, 200);
-		User user = this->service.createUserFromString(userBuffer);
-		if (user.getLogin() == login && user.getPassord() == this->service.encodePassword(password)) {
+		User user = service->createUserFromString(userBuffer);
+		if (user.getLogin() == login && user.getPassord() == service->encodePassword(password)) {
 			if (user.getRole() == "us") {
 				UserMenu userMenu(user.getId());
 				userMenu.menu();
@@ -86,7 +86,7 @@ void AccountService::registration() {
 		enterValue(buffer);
 		regex passRe("[a-z\\d_.]{3,12}");
 			if (regex_match(buffer.c_str(), passRe)) {
-				user.setPassord(this->service.encodePassword(buffer));
+				user.setPassord(service->encodePassword(buffer));
 				break;
 			}
 			else cout << "Неверный формат пароля, попробуйте еще" << endl;
@@ -142,7 +142,7 @@ void AccountService::registration() {
 		else cout << "Неверный формат почты, попробуйте еще" << endl;
 	}
 	user.setId(getLastId() + 1);
-	ofstream file("e://ЛАБЫ/Олесе/users.txt", ios::app);
+	ofstream file("e://ЛАБЫ/4 сем/users.txt", ios::app);
 	if (!file.is_open()) {
 		cout << "Ошибка открытия файла!" << endl;
 		return;
@@ -157,9 +157,9 @@ void AccountService::registration() {
 }
 
 bool checkLogin(string login) {
-	Service service;
+	Service *service = Service::getInstance();
 	Vector<User> users;
-	service.createUserVector(users);
+	service->createUserVector(users);
 	for (int i = 0; i < users.getSize(); i++)
 	{
 		if (users.getArray()[i].getLogin() == login) return false;
@@ -168,9 +168,9 @@ bool checkLogin(string login) {
 }
 
 int getLastId() {
-	Service service;
+	Service *service = Service::getInstance();
 	Vector<User> users;
-	service.createUserVector(users);
+	service->createUserVector(users);
 	int maxId = -1;
 	for (int i = 0; i < users.getSize(); i++)
 	{

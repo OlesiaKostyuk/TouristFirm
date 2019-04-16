@@ -46,9 +46,9 @@ void UserMenu::showAllHotels() {
 		system("cls");
 		cout << "Все отели:" << endl;
 		Vector<Hotel> hotels;
-		this->service.createHotelVector(hotels);
+		service->createHotelVector(hotels);
 		this->sortHotels(sort, hotels);
-		this->service.printHotelVector(hotels);
+		service->printHotelVector(hotels);
 		switch (hotelsMenu())
 		{
 		case 1: {
@@ -56,7 +56,7 @@ void UserMenu::showAllHotels() {
 			cout << "Введите id отеля: ";
 			cin >> id;
 			this->addReview(id);
-			this->service.printEnterMessage();
+			service->printEnterMessage();
 			break;
 		}
 		case 2: {
@@ -64,18 +64,18 @@ void UserMenu::showAllHotels() {
 			int id;
 			cout << "Введите id отеля: ";
 			cin >> id;
-			this->service.createReviewVector(reviews, id);
+			service->createReviewVector(reviews, id);
 			if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
 			else {
-				this->service.printReviewString();
-				this->service.printReviewTitle();
+				service->printReviewString();
+				service->printReviewTitle();
 				for (int i = 0; i < reviews.getSize(); i++) {
-					this->service.printReviewString();
+					service->printReviewString();
 					cout << reviews.getArray()[i];
 				}
-				this->service.printReviewString();
+				service->printReviewString();
 			}
-			this->service.printEnterMessage();
+			service->printEnterMessage();
 			break;
 		}
 		case 3: {
@@ -100,8 +100,8 @@ void UserMenu::showAllHotels() {
 void UserMenu::sortHotels(int i, Vector<Hotel> &hotel) {
 	switch (i)
 	{
-	case 1: this->service.sortHotelsVectorByName(hotel); break;
-	case 2: this->service.sortHotelsVectorByRate(hotel); break;
+	case 1: service->sortHotelsVectorByName(hotel); break;
+	case 2: service->sortHotelsVectorByRate(hotel); break;
 	}
 }
 
@@ -123,9 +123,9 @@ void UserMenu::showAllTours() {
 		system("cls");
 		cout << "Все туры:" << endl;
 		Vector<Tour> tours;
-		this->service.createTourVector(tours);
+		service->createTourVector(tours);
 		this->sortTours(sort, tours);
-		this->service.printTourVector(tours);
+		service->printTourVector(tours);
 		switch (toursMenu()) {
 		case 1: {
 			int i;
@@ -156,7 +156,7 @@ void UserMenu::showAllTours() {
 
 int UserMenu::getHotelIdByTourId(int id) {
 	Vector<Tour> tours;
-	this->service.createTourVector(tours);
+	service->createTourVector(tours);
 	for (int i = 0; i < tours.getSize(); i++)
 	{
 		if (tours.getArray()[i].getId() == id) return tours.getArray()[i].getHotelId();
@@ -170,32 +170,32 @@ void UserMenu::showHotelById(int id) {
 	}
 	else {
 		Vector<Hotel> hotels;
-		this->service.createHotelVector(hotels);
-		this->service.printHotelTableString();
-		this->service.printHotelTableTitle();
+		service->createHotelVector(hotels);
+		service->printHotelTableString();
+		service->printHotelTableTitle();
 		for (int i = 0; i < hotels.getSize(); i++)
 		{
 			if (hotels.getArray()[i].getId() == id) {
-				this->service.printHotelTableString();
+				service->printHotelTableString();
 				cout << hotels.getArray()[i];
-				this->service.printHotelTableString();
+				service->printHotelTableString();
 				cout << endl << "Отзывы: " << endl;
 				Vector<Review> reviews;
-				this->service.createReviewVector(reviews, id);
+				service->createReviewVector(reviews, id);
 				if (reviews.getSize() == 0) cout << "Отзывов нет" << endl;
 				else {
-					this->service.printReviewString();
-					this->service.printReviewTitle();
+					service->printReviewString();
+					service->printReviewTitle();
 					for (int i = 0; i < reviews.getSize(); i++) {
-						this->service.printReviewString();
+						service->printReviewString();
 						cout << reviews.getArray()[i];
 					}
-					this->service.printReviewString();
+					service->printReviewString();
 				}
 			}
 		}
 	}
-	this->service.printEnterMessage();
+	service->printEnterMessage();
 }
 
 int UserMenu::toursMenu() {
@@ -210,9 +210,9 @@ int UserMenu::toursMenu() {
 
 void UserMenu::sortTours(int i, Vector<Tour> &tours) {
 	switch (i) {
-	case 1: this->service.sortTourVectorByCost(tours); break;
-	case 2: this->service.sortTourVectorByBeginDate(tours); break;
-	case 3: this->service.sortTourVectorByEndDate(tours); break;
+	case 1: service->sortTourVectorByCost(tours); break;
+	case 2: service->sortTourVectorByBeginDate(tours); break;
+	case 3: service->sortTourVectorByEndDate(tours); break;
 	}
 }
 
@@ -222,16 +222,16 @@ void UserMenu::showUserBookings() {
 		system("cls");
 		cout << "Мои брони:" << endl;
 		Vector<Booking> books;
-		this->service.createBookingVector(books, this->userId);
-		this->service.sortBookingVectorById(books);
+		service->createBookingVector(books, this->userId);
+		service->sortBookingVectorById(books);
 		if (books.getSize() != 0) {
-			this->service.printBookingTableString();
-			this->service.printBookingTableTitle();
+			service->printBookingTableString();
+			service->printBookingTableTitle();
 			for (int i = 0; i < books.getSize(); i++) {
-				this->service.printBookingTableString();
+				service->printBookingTableString();
 				cout << books.getArray()[i];
 			}
-			this->service.printBookingTableString();
+			service->printBookingTableString();
 
 			cout << "1) Удалить бронь" << endl;
 			cout << "2) Назад" << endl;
@@ -241,17 +241,17 @@ void UserMenu::showUserBookings() {
 				int id;
 				cout << "Введите id брони, которую хотите удалить" << endl;
 				cin >> id;
-				this->service.removeUserBooking(id, this->userId);
-				this->service.printEnterMessage();
+				service->removeUserBooking(id, this->userId);
+				service->printEnterMessage();
 			}
 			else {
-				this->service.printEnterMessage();
+				service->printEnterMessage();
 				return;
 			}
 		}
 		else {
 			cout << "У вас нет ни одной брони" << endl;
-			this->service.printEnterMessage();
+			service->printEnterMessage();
 			return;
 		}		
 	}
@@ -259,7 +259,7 @@ void UserMenu::showUserBookings() {
 
 void UserMenu::bookTour(int tourId) {
 	Vector<Tour> tours;
-	this->service.createTourVector(tours);
+	service->createTourVector(tours);
 	bool exist = false;
 	for (int i = 0; i < tours.getSize(); i++)
 	{
@@ -268,19 +268,19 @@ void UserMenu::bookTour(int tourId) {
 			break;
 		}
 	}
-	int id = this->service.getLastBookingId() + 1;
+	int id = service->getLastBookingId() + 1;
 	if (exist) {
 		string passport;
 		while (true) {
 			cout << "Введите номер пасспорта" << endl;
-			this->service.enterValue(passport);
+			service->enterValue(passport);
 			regex passReg("[A-Z]{2}[\\d]{7}");
 			if (regex_match(passport.c_str(), passReg)) {
 				break;
 			}
 			else cout << "Неверный формат номера паспорта, попробуйте еще" << endl;
 		}
-		ofstream file("e://ЛАБЫ/Олесе/bookings.txt", ios::app);
+		ofstream file("e://ЛАБЫ/4 сем/bookings.txt", ios::app);
 		if (!file.is_open()) {
 			cout << "Ошибка открытия файла!" << endl;
 			return;
@@ -288,20 +288,20 @@ void UserMenu::bookTour(int tourId) {
 		else {
 			file << "\n" << id << " " << tourId << " " << this->userId << " " << passport << " unpaid";
 			cout << "Тур забронирован" << endl;
-			this->service.printEnterMessage();
+			service->printEnterMessage();
 		}
 		file.close();
 	}
 	else {
 		cout << "id не найден" << endl;
-		this->service.printEnterMessage();
+		service->printEnterMessage();
 	}
 
 }
 
 void UserMenu::addReview(int hotelId) {
 	Vector<Review> reviews;
-	this->service.createReviewVector(reviews, 0);
+	service->createReviewVector(reviews, 0);
 	bool exist = false;
 	for (int i = 0; i < reviews.getSize(); i++)
 	{
@@ -310,13 +310,13 @@ void UserMenu::addReview(int hotelId) {
 			break;
 		}
 	}
-	int id = this->service.getLastReviewId() + 1;
+	int id = service->getLastReviewId() + 1;
 	if (exist) {
 		char text[500];
 		cout << "Введите текст отзыва: " << endl;
 		cin.get();
 		cin.getline(text, 500, '\n');
-		ofstream file("e://ЛАБЫ/Олесе/review.txt", ios::app);
+		ofstream file("e://ЛАБЫ/4 сем/review.txt", ios::app);
 		int rate = 0;
 		cout << "Введите оценку отелю от 1 до 5 (другие значения принимаются как 2) ";
 		cin >> rate;
@@ -336,32 +336,32 @@ void UserMenu::addReview(int hotelId) {
 	}
 	else {
 		cout << "id не найден" << endl;
-		this->service.printEnterMessage();
+		service->printEnterMessage();
 	}
 }
 
 void UserMenu::showMyProfile() {
 	system("cls");
-	User user = this->service.getUserById(this->userId);
-	this->service.printUserString();
-	this->service.printUserTitle();
-	this->service.printUserString();
+	User user = service->getUserById(this->userId);
+	service->printUserString();
+	service->printUserTitle();
+	service->printUserString();
 	cout << user;
-	this->service.printUserString();
-	this->service.printEnterMessage();
+	service->printUserString();
+	service->printEnterMessage();
 }
 
 void UserMenu::showTourListByHotel(int id) {
 	Vector<Tour> tours;
-	this->service.createTourVector(tours);
-	this->service.printTourTableString();
-	this->service.printTourTableTitle();
+	service->createTourVector(tours);
+	service->printTourTableString();
+	service->printTourTableTitle();
 	for (int i = 0; i < tours.getSize(); i++) {
 		if (tours.getArray()[i].getHotelId() == id) {
-			this->service.printTourTableString();
+			service->printTourTableString();
 			cout << tours.getArray()[i];
 		}
 	}
-	this->service.printTourTableString();
-	this->service.printEnterMessage();
+	service->printTourTableString();
+	service->printEnterMessage();
 }

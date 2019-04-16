@@ -3,7 +3,7 @@
 class UserMenu
 {
 	int userId;
-	Service service;
+	Service *service;
 public:
 
 	void menu();
@@ -28,7 +28,9 @@ public:
 
 	void sortTours(int i, Vector<Tour> &tours);
 	void sortHotels(int i, Vector<Hotel> &tours);
-	UserMenu(int id) { this->userId = id; };
+	UserMenu(int id) { 
+		service = Service::getInstance();
+		this->userId = id; };
 	~UserMenu() {};
 };
 

@@ -13,7 +13,7 @@ int AdminMenu::showMenu() {
 	cout << "Добро пожаловать, администратор!" << endl;
 	cout << "1) Просмотреть туры" << endl;
 	cout << "2) Просмотреть отели" << endl;
-	cout << "3) Просмотреть завки" << endl;
+	cout << "3) Просмотреть заявки" << endl;
 	cout << "4) Просмотреть пользователей" << endl;
 	cout << "5) Выйти" << endl;
 	cin >> i;
@@ -44,8 +44,8 @@ void AdminMenu::showAllTours() {
 	while (true) {
 		system("cls");
 		Vector<Tour> tours;
-		this->service.createTourVector(tours);
-		this->service.printTourVector(tours);
+		service->createTourVector(tours);
+		service->printTourVector(tours);
 		switch (toursMenu())
 		{
 		case 1: this->addTour(); break;
@@ -61,8 +61,8 @@ void AdminMenu::showAllHotels() {
 	while (true) {
 		system("cls");
 		Vector<Hotel> hotels;
-		this->service.createHotelVector(hotels);
-		this->service.printHotelVector(hotels);
+		service->createHotelVector(hotels);
+		service->printHotelVector(hotels);
 		switch (hotelsMenu())
 		{
 		case 1: this->addHotel(); break;
@@ -78,25 +78,25 @@ void AdminMenu::showAllBookings() {
 	while (true) {
 		system("cls");
 		Vector<Booking> bookings;
-		this->service.createBookingVector(bookings, 0);
-		this->service.sortBookingVectorById(bookings);
-		this->service.printBookingTableString();
-		this->service.printBookingTableTitle();
+		service->createBookingVector(bookings, 0);
+		service->sortBookingVectorById(bookings);
+		service->printBookingTableString();
+		service->printBookingTableTitle();
 		for (int i = 0; i < bookings.getSize(); i++)
 		{
 			if (filter) {
 				if (bookings.getArray()[i].getPaymentStatus() == "unpaid")
 				{
-					this->service.printBookingTableString();
+					service->printBookingTableString();
 					cout << bookings.getArray()[i];
 				}
 			}
 			else {
-				this->service.printBookingTableString();
+				service->printBookingTableString();
 				cout << bookings.getArray()[i];
 			}
 		}
-		this->service.printBookingTableString();
+		service->printBookingTableString();
 		switch (bookingsMenu())
 		{
 		case 1: {
@@ -122,14 +122,14 @@ void AdminMenu::showAllBookings() {
 			}
 			if (existAndUnpaid) {
 				Vector<Booking> booking;
-				this->service.createBookingVector(booking, 0);
+				service->createBookingVector(booking, 0);
 				for (int i = 0; i < booking.getSize(); i++)
 				{
 					counter++;
 					if (booking.getArray()[i].getBookId() == id) {
 						temp = booking.getArray()[i];
-						this->service.deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/bookings.txt");
-						ofstream file("e://ЛАБЫ/Олесе/bookings.txt", ios::app);
+						service->deleteStringFromFile(counter, "e://ЛАБЫ/4 сем/bookings.txt");
+						ofstream file("e://ЛАБЫ/4 сем/bookings.txt", ios::app);
 						if (!file.is_open()) {
 							cout << "Ошибка открытия файла!" << endl;
 							break;
@@ -146,7 +146,7 @@ void AdminMenu::showAllBookings() {
 			else {
 				cout << "Бронь с таким id не найдена или она уже оплачена" << endl;
 			}
-			this->service.printEnterMessage();
+			service->printEnterMessage();
 			break;
 		}
 		default:
@@ -158,17 +158,17 @@ void AdminMenu::showAllBookings() {
 void AdminMenu::showAllUsers() {
 	system("cls");
 	Vector<User> users;
-	this->service.createUserVector(users);
-	this->service.printUserString();
-	this->service.printUserTitle();
+	service->createUserVector(users);
+	service->printUserString();
+	service->printUserTitle();
 	for (int i = 0; i < users.getSize(); i++) {
 		if (users.getArray()[i].getRole() == "us") {
-			this->service.printUserString();
+			service->printUserString();
 			cout << users.getArray()[i];
 		}
 	}
-	this->service.printUserString();
-	this->service.printEnterMessage();
+	service->printUserString();
+	service->printEnterMessage();
 }
 
 int AdminMenu::toursMenu() {
@@ -203,7 +203,7 @@ void AdminMenu::addTour() {
 	string buffer;
 	while (true) {
 		cout << "Введите страну: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex tourRe("[a-zA-Zа-яА-Я]{2,30}");
 		if (regex_match(buffer.c_str(), tourRe)) {
 			tour.setCountry(buffer);
@@ -213,7 +213,7 @@ void AdminMenu::addTour() {
 	}
 	while (true) {
 		cout << "Введите название авиакомпании: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex tourRe("[a-zA-Zа-яА-Я\\d]{2,40}");
 		if (regex_match(buffer.c_str(), tourRe)) {
 			tour.setAviaCompanyName(buffer);
@@ -222,8 +222,8 @@ void AdminMenu::addTour() {
 		else cout << "Неверный формат авиакомпании, попробуйте еще" << endl;
 	}
 	while (true) {
-		cout << "Введите дату начала в формате yyyy-mm-dd: " << endl;;
-		this->service.enterValue(buffer);
+		cout << "Введите дату начала в формате yyyy/mm/dd: " << endl;;
+		service->enterValue(buffer);
 		regex dateRe("[\\d]{4}\\/[\\d]{2}\\/[\\d]{2}");
 		if (regex_match(buffer.c_str(), dateRe)) {
 			tour.setBeginDate(buffer);
@@ -232,8 +232,8 @@ void AdminMenu::addTour() {
 		else cout << "Неверный формат даты, попробуйте еще" << endl;
 	}
 	while (true) {
-		cout << "Введите дату окончания в формате yyyy-mm-dd: " << endl;;
-		this->service.enterValue(buffer);
+		cout << "Введите дату окончания в формате yyyy/mm/dd: " << endl;;
+		service->enterValue(buffer);
 		regex dateRe("[\\d]{4}\\/[\\d]{2}\\/[\\d]{2}");
 		if (regex_match(buffer.c_str(), dateRe)) {
 			if (tour.getBeginDate() < buffer) {
@@ -248,7 +248,7 @@ void AdminMenu::addTour() {
 	}
 	while (true) {
 		cout << "Введите стоимоть: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex costRe("[\\d]+");
 		if (regex_match(buffer.c_str(), costRe)) {
 			tour.setCost(atoi(buffer.data()));
@@ -258,13 +258,13 @@ void AdminMenu::addTour() {
 	}
 	while (true) {
 		cout << "Введите id отеля: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex costRe("[\\d]+");
 		if (regex_match(buffer.c_str(), costRe)) {
 			int id = atoi(buffer.data());
 			bool exist = false;
 			Vector<Hotel> hotels;
-			this->service.createHotelVector(hotels);
+			service->createHotelVector(hotels);
 			for (int i = 0; i < hotels.getSize(); i++) {
 				if (hotels.getArray()[i].getId() == id) {
 					exist = true;
@@ -281,18 +281,18 @@ void AdminMenu::addTour() {
 		}
 		else cout << "Неверный формат цены, попробуйте еще" << endl;
 	}
-	ofstream file("e://ЛАБЫ/Олесе/tours.txt", ios::app);
+	ofstream file("e://ЛАБЫ/4 сем/tours.txt", ios::app);
 	if (!file.is_open()) {
 		cout << "Ошибка открытия файла!" << endl;
 		return;
 	}
 	else {
-		file << "\n" << this->service.getLastTourId() + 1 << " " << tour.getCountry() << " " << tour.getBeginDate() << " " << tour.getEndDate() << " " << tour.getCost();
+		file << "\n" << service->getLastTourId() + 1 << " " << tour.getCountry() << " " << tour.getBeginDate() << " " << tour.getEndDate() << " " << tour.getCost();
 		file << " " << tour.getHotelId() << " " << tour.getAviaCompanyName();
 		cout << "Тур добавлен" << endl;
 	}
 	file.close();
-	this->service.printEnterMessage();
+	service->printEnterMessage();
 }
 
 void AdminMenu::deleteTour() {
@@ -300,9 +300,9 @@ void AdminMenu::deleteTour() {
 	int id;
 	cin >> id;
 	Vector<Tour> tours;
-	this->service.createTourVector(tours);
+	service->createTourVector(tours);
 	Vector<Booking> bookings;
-	this->service.createBookingVector(bookings, 0);
+	service->createBookingVector(bookings, 0);
 	bool error = false;
 	for (int j = 0; j < bookings.getSize(); j++) {
 		if (id == bookings.getArray()[j].getTourId()) {
@@ -312,7 +312,7 @@ void AdminMenu::deleteTour() {
 	}
 	if (error) {
 		cout << "Вы не можете удалить данный тур, так как он уже забронирован" << endl;
-		this->service.printEnterMessage();
+		service->printEnterMessage();
 		return;
 	}
 	else {
@@ -322,13 +322,13 @@ void AdminMenu::deleteTour() {
 			counter++;
 			if (tours.getArray()[i].getId() == id) {
 				cout << "Тур удален" << endl;
-				this->service.deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/tours.txt");
+				service->deleteStringFromFile(counter, "e://ЛАБЫ/4 сем/tours.txt");
 				return;
 			}
 		}
 	}
 	cout << "Тур в таким id не найден" << endl;
-	this->service.printEnterMessage();
+	service->printEnterMessage();
 }
 
 void AdminMenu::addHotel() {
@@ -336,7 +336,7 @@ void AdminMenu::addHotel() {
 	string buffer;
 	while (true) {
 		cout << "Введите название отеля: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex hotelRe("[a-zA-Zа-яА-Я]{2,30}");
 		if (regex_match(buffer.c_str(), hotelRe)) {
 			hotel.setHotelName(buffer);
@@ -346,7 +346,7 @@ void AdminMenu::addHotel() {
 	}
 	while (true) {
 		cout << "Введите количество звезд: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex starRe("[12345]");
 		if (regex_match(buffer.c_str(), starRe)) {
 			hotel.setStars(atoi(buffer.data()));
@@ -356,7 +356,7 @@ void AdminMenu::addHotel() {
 	}
 	while (true) {
 		cout << "Введите страну: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex hotelRe("[a-zA-Zа-яА-Я]{2,30}");
 		if (regex_match(buffer.c_str(), hotelRe)) {
 			hotel.setCountry(buffer);
@@ -366,7 +366,7 @@ void AdminMenu::addHotel() {
 	}
 	while (true) {
 		cout << "Введите город: " << endl;;
-		this->service.enterValue(buffer);
+		service->enterValue(buffer);
 		regex hotelRe("[a-zA-Zа-яА-Я]{2,30}");
 		if (regex_match(buffer.c_str(), hotelRe)) {
 			hotel.setTown(buffer);
@@ -385,18 +385,18 @@ void AdminMenu::addHotel() {
 	strstream stream;
 	stream << text << ends;
 	hotel.setDescription(stream.str());
-	ofstream file("e://ЛАБЫ/Олесе/hotels.txt", ios::app);
+	ofstream file("e://ЛАБЫ/4 сем/hotels.txt", ios::app);
 	if (!file.is_open()) {
 		cout << "Ошибка открытия файла!" << endl;
 		return;
 	}
 	else {
-		file << "\n" << this->service.getLastHotelId() + 1 << " " << hotel.getHotelName() << " " << hotel.getStars() << " " << hotel.getCountry();
+		file << "\n" << service->getLastHotelId() + 1 << " " << hotel.getHotelName() << " " << hotel.getStars() << " " << hotel.getCountry();
 		file << " " << hotel.getTown() << " " << hotel.getDescription();
 		cout << "Отель добавлен" << endl;
 	}
 	file.close();
-	this->service.printEnterMessage();
+	service->printEnterMessage();
 }
 
 void AdminMenu::deleteHotel() {
@@ -404,9 +404,9 @@ void AdminMenu::deleteHotel() {
 	int id;
 	cin >> id;
 	Vector<Hotel> hotels;
-	this->service.createHotelVector(hotels);
+	service->createHotelVector(hotels);
 	Vector<Tour> tours;
-	this->service.createTourVector(tours);
+	service->createTourVector(tours);
 	bool error = false;
 	for (int j = 0; j < tours.getSize(); j++) {
 		if (id == tours.getArray()[j].getHotelId()) {
@@ -416,7 +416,7 @@ void AdminMenu::deleteHotel() {
 	}
 	if (error) {
 		cout << "Вы не можете удалить данный отель, так как он он уже веключен в тур" << endl;
-		this->service.printEnterMessage();
+		service->printEnterMessage();
 		return;
 	}
 	else {
@@ -426,12 +426,12 @@ void AdminMenu::deleteHotel() {
 			counter++;
 			if (hotels.getArray()[i].getId() == id) {
 				cout << "Отель удален" << endl;
-				this->service.deleteStringFromFile(counter, "e://ЛАБЫ/Олесе/hotels.txt");
+				service->deleteStringFromFile(counter, "e://ЛАБЫ/4 сем/hotels.txt");
 				return;
 			}
 		}
 	}
 	cout << "Отель в таким id не найден" << endl;
-	this->service.printEnterMessage();
+	service->printEnterMessage();
 
 }

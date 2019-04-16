@@ -4,9 +4,11 @@ class AccountService
 {
 public:
 
-	Service service;
+	Service *service;
 
-	AccountService() {};
+	AccountService() {
+		this->service = Service::getInstance();
+	};
 	void registration();
 	void authorization();
 	~AccountService() {};

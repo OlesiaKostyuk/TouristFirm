@@ -1,7 +1,7 @@
 #include "Service.h"
 class AdminMenu
 {
-	Service service;
+	Service *service;
 public:
 	void menu();
 	int showMenu();
@@ -21,7 +21,9 @@ public:
 	void addHotel();
 	void deleteHotel();
 
-	AdminMenu() {};
+	AdminMenu() {
+		service = Service::getInstance();
+	};
 	~AdminMenu() {};
 };
 

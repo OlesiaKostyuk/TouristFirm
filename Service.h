@@ -11,7 +11,18 @@
 using namespace std;
 class Service
 {
+	Service() {}
+	~Service() {}
+
+	static Service *service;
 public:
+
+	static Service* getInstance() {
+		if (!service) {
+			service = new Service();
+		}
+		return service;
+	}
 
 	User createUserFromString(char* userString);
 	Tour createTourFromString(char* tourString);
@@ -108,10 +119,4 @@ public:
 			if (str[i] == old) str[i] = newChar;
 		}
 	}
-
-	Service() {}
-	~Service() {}
 };
-
-
-
